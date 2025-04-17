@@ -1,0 +1,26 @@
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    padding: 0 16px;
+}
+
+.feature {
+    max-width: 280px;
+}
+
+.feature img {
+    height: 48px;
+    margin-bottom: 12px;
+}
+
+.feature h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.feature p {
+    font-size: 15px;
+    color: #444;
+}

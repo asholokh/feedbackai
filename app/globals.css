@@ -1,90 +1,9 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Playfair Display', sans-serif;
+  font-family: sans-serif;
   background-color: #fdf9f3;
   color: #1f2a36;
   text-align: center;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px 48px;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo img {
-  height: 32px;
-}
-
-.logo h1 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.login-link {
-  font-weight: 500;
-  color: #1f2a36;
-  text-decoration: none;
-}
-
-.main-content {
-  padding: 40px 16px;
-}
-
-.main-heading {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 24px 0 12px;
-}
-
-.subheading {
-  font-size: 18px;
-  margin-bottom: 24px;
-}
-
-.cta-button {
-  background-color: #4da9f3;
-  color: #fff;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 48px;
-}
-
-.features {
-  display: flex;
-  justify-content: center;
-  gap: 48px;
-  flex-wrap: wrap;
-  padding: 0 16px;
-}
-
-.feature {
-  max-width: 280px;
-}
-
-.feature img {
-  height: 48px;
-  margin-bottom: 12px;
-}
-
-.feature h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-
-.feature p {
-  font-size: 15px;
-  color: #444;
-}
