@@ -11,7 +11,7 @@ export default function Home() {
         </Head>
         <header className="header">
           <div className="logo">
-            <img src="assets/main-icon.png" alt="FeedbackAi logo" />
+            <img src="assets/icon-main.png" alt="FeedbackAi logo" />
             <h1>FeedbackAi</h1>
           </div>
           <a className="login-link" href="#">
@@ -30,12 +30,12 @@ export default function Home() {
 
           <section className="features">
             <div className="feature">
-              <img src="assets/main-icon.png" alt="Collect Feedback" />
+              <img src="assets/icon-main.png" alt="Collect Feedback" />
               <h3>Collect Feedback</h3>
               <p>Gather feedback snippets for each team member over time</p>
             </div>
             <div className="feature">
-              <img src="assets/generate-icon.png" alt="Generate Reports" />
+              <img src="assets/icon-generate-reports.png" alt="Generate Reports" />
               <h3>Generate Reports</h3>
               <p>
                 Compile the feedback into detailed reports, either formal or
@@ -43,7 +43,7 @@ export default function Home() {
               </p>
             </div>
             <div className="feature">
-              <img src="assets/icon-edit.png" alt="Review and Edit" />
+              <img src="assets/icon-review-and-edit.png" alt="Review and Edit" />
               <h3>Review and Edit</h3>
               <p>Easily review the generated feedback and make any necessary edits</p>
             </div>
