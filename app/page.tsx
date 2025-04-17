@@ -1,13 +1,22 @@
+'use client';
+
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleGetStartedClick = () => {
+    router.push('/registration');
+  };
+
   return (
       <>
         <Head>
           <title>FeedbackAi</title>
           <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <link rel="stylesheet" href="style.css" />
+          <link rel="stylesheet" href="globals.css" />
         </Head>
         <header className="header">
           <div className="logo">
@@ -24,10 +33,9 @@ export default function Home() {
           <p className="subheading">
             Easily compile substantial feedback for your team with the help of AI.
           </p>
-          <a href="#" className="cta-button">
+          <button onClick={handleGetStartedClick} className="cta-button">
             Get Started
-          </a>
-
+          </button>
           <section className="features">
             <div className="feature">
               <img src="assets/icon-main.png" alt="Collect Feedback" />
