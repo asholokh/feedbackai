@@ -11,7 +11,7 @@ export default function Home() {
         </Head>
         <header className="header">
           <div className="logo">
-            <img src="assets/logo.png" alt="FeedbackAi logo" />
+            <img src="assets/main-icon.png" alt="FeedbackAi logo" />
             <h1>FeedbackAi</h1>
           </div>
           <a className="login-link" href="#">
