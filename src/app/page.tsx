@@ -20,7 +20,7 @@ export default function Home() {
         </header>
 
         <main className="main-content">
-          <h2 className="main-heading">AI-powered feedback for managers</h2>
+          <h2 className="main-heading">AI-powered feedback generator for managers</h2>
           <p className="subheading">
             Easily compile substantial feedback for your team with the help of AI.
           </p>
