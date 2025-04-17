@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAqRqymJqAk4u_nj8T1mPjXIjoDhEiI3f8",
+    apiKey: "",
     authDomain: "feedbackai-230ef.firebaseapp.com",
     projectId: "feedbackai-230ef",
     storageBucket: "feedbackai-230ef.firebasestorage.app",
