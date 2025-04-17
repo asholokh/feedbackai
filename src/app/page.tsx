@@ -30,12 +30,12 @@ export default function Home() {
 
           <section className="features">
             <div className="feature">
-              <img src="assets/icon-feedback.png" alt="Collect Feedback" />
+              <img src="assets/main-icon.png" alt="Collect Feedback" />
               <h3>Collect Feedback</h3>
               <p>Gather feedback snippets for each team member over time</p>
             </div>
             <div className="feature">
-              <img src="assets/icon-generate.png" alt="Generate Reports" />
+              <img src="assets/generate-icon.png" alt="Generate Reports" />
               <h3>Generate Reports</h3>
               <p>
                 Compile the feedback into detailed reports, either formal or
