@@ -5,11 +5,11 @@ import './Header.css';
 export default function Header() {
     return (
         <header className="header">
-            <div className="logo">
+            <a className="logo" href="/">
                 <Image src="/assets/icon-main.png" alt="FeedbackAi logo" width={32} height={32} />
                 <h1>FeedbackAi</h1>
-            </div>
-            <a className="login-link" href="#">
+            </a>
+            <a className="login-link" href="/login">
                 Log in
             </a>
         </header>
