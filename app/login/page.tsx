@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
@@ -18,7 +19,7 @@ export default function Login() {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             router.push("/dashboard"); // Redirect to dashboard on successful login
-        } catch (err) {
+        } catch {
             setError("Invalid email or password. Please try again.");
         }
     };
@@ -28,7 +29,7 @@ export default function Login() {
         try {
             await signInWithPopup(auth, provider);
             router.push("/dashboard"); // Redirect to dashboard on successful login
-        } catch (err) {
+        } catch {
             setError("Failed to log in with Google. Please try again.");
         }
     };
@@ -42,7 +43,7 @@ export default function Login() {
                 {error && <p className="error-text">{error}</p>}
 
                 <button className="google-button" onClick={handleGoogleLogin}>
-                    <img
+                    <Image
                         src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw"
                         alt="Google icon"
                         width={32}
@@ -74,7 +75,7 @@ export default function Login() {
                 </form>
 
                 <p className="footer-text">
-                    Don't have an account? <a href="/registration">Sign up</a>
+                    Don&apos;t have an account? <a href="/registration">Sign up</a>
                 </p>
             </div>
         </div>
