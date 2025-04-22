@@ -13,13 +13,58 @@
     margin-bottom: 24px;
 }
 
-.cta-button {
-    background-color: #4da9f3;
-    color: #fff;
-    padding: 14px 28px;
+.feedback-panel {
+    background-color: #6c8fbf;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
     border-radius: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 48px;
+    margin: 20px auto;
+    width: 100%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.panel-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.panel-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.panel-message {
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+.cta-button {
+    background: white;
+    color: #4a6a9c;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cta-button:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px; /* Ensures both panels have the same width */
+    margin: 0 auto;
 }

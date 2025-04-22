@@ -18,10 +18,20 @@ export default function Home() {
             <p className="subheading">
                 Easily compile substantial feedback for your team with the help of AI.
             </p>
-            <button onClick={handleGetStartedClick} className="cta-button">
-                Get Started
-            </button>
-            <Features/>
+            <div className="panel-container">
+                <section className="feedback-panel">
+                    <div className="panel-content">
+                        <h2 className="panel-title">Simplify Performance Reviews with Confidence</h2>
+                        <p className="panel-message">
+                            Performance reviews don't have to be stressful. Our AI-powered tool simplifies the process, helping you provide meaningful feedback with ease. Make reviews a positive experience for everyone involved.
+                        </p>
+                        <button className="cta-button" onClick={handleGetStartedClick}>
+                            Get Started Now
+                        </button>
+                    </div>
+                </section>
+                <Features/>
+            </div>
         </main>
-    );
+);
 }
