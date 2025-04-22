@@ -35,3 +35,8 @@
     color: #1f2a36;
     text-decoration: none;
 }
+
+.no-underline {
+    text-decoration: none; /* Removes the underline */
+    color: inherit; /* Optional: Inherit the text color */
+}
