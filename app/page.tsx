@@ -23,7 +23,7 @@ export default function Home() {
                     <div className="panel-content">
                         <h2 className="panel-title">Simplify Performance Reviews with Confidence</h2>
                         <p className="panel-message">
-                            Performance reviews don't have to be stressful. Our AI-powered tool simplifies the process, helping you provide meaningful feedback with ease. Make reviews a positive experience for everyone involved.
+                            Performance reviews don&apos;t have to be stressful. Our AI-powered tool simplifies the process, helping you provide meaningful feedback with ease. Make reviews a positive experience for everyone involved.
                         </p>
                         <button className="cta-button" onClick={handleGetStartedClick}>
                             Get Started Now
