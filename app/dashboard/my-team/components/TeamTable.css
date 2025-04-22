@@ -1,0 +1,67 @@
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-table th, .team-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.team-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.team-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.team-table tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+.team-table button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.team-table button:hover {
+    background-color: #0056b3;
+}
+
+.team-table button {
+    display: inline-flex; /* Ensure buttons are inline and aligned */
+    align-items: center;
+    margin-right: 5px; /* Add spacing between buttons */
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    gap: 5px;
+    font-size: 14px;
+    height: 40px; /* Ensure consistent height */
+}
+
+.table-button:hover {
+    background-color: #0056b3;
+}
+
+.team-table td {
+    vertical-align: middle; /* Align content vertically in the center */
+    padding: 10px; /* Add padding for better spacing */
+    white-space: nowrap; /* Prevent buttons from wrapping to the next line */
+}
