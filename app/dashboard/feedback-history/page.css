@@ -1,0 +1,90 @@
+.feedback-history-container {
+    padding: 20px;
+}
+
+/* Container for the dropdown */
+.filter-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Label styling */
+.filter-container label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+}
+
+.feedback-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feedback-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.feedback-item-header {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    gap: 10px; /* Add spacing between name and date */
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+}
+
+.feedback-item-text {
+    font-family: 'Roboto', sans-serif; /* Use a modern font */
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.feedback-item-separator {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 5px 0;
+}
+
+/* Dropdown styling */
+#team-member-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: all 0.3s ease;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Dropdown hover and focus effects */
+#team-member-select:hover {
+    border-color: #007bff;
+    background-color: #fff;
+}
+
+#team-member-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Option styling */
+#team-member-select option {
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+}
