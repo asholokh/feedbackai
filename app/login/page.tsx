@@ -17,8 +17,13 @@ export default function Login() {
         e.preventDefault();
         setError(""); // Clear any previous errors
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            router.push("/dashboard"); // Redirect to dashboard on successful login
+            const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+
+            if (userCredentials.user.emailVerified) {
+                router.push("/dashboard"); // Redirect to dashboard on successful login
+            } else {
+                setError("User email is not yet verified");
+            }
         } catch {
             setError("Invalid email or password. Please try again.");
         }

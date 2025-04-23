@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "@firebase/firestore";
+import React, {useCallback, useEffect, useState} from "react";
+import {addDoc, collection, getDocs, query, where} from "@firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { auth } from "../../../firebase/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -15,7 +15,7 @@ export default function MyTeam() {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isFeedbackPopupOpen, setIsFeedbackPopupOpen] = useState(false);
-    const [selectedMemberName, setSelectedMemberName] = useState<string | null>(null);
+    const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
     const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
     const [userUid, setUserUid] = useState<string | null>(null);
 
@@ -29,21 +29,52 @@ export default function MyTeam() {
         return () => unsubscribe();
     }, []);
 
-    useEffect(() => {
-        if (userUid) {
-            const fetchTeamMembers = async () => {
-                const q = query(collection(db, "teamMembers"), where("uid", "==", userUid));
-                const querySnapshot = await getDocs(q);
-                const members = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                })) as TeamMember[];
-                setTeamMembers(members);
-            };
+    const fetchTeamMembersAndFeedback = useCallback(async () => {
+        // Fetch team members
+        const teamQuery = query(collection(db, "teamMembers"), where("uid", "==", userUid));
+        const teamSnapshot = await getDocs(teamQuery);
+        const members = teamSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        })) as TeamMember[];
 
-            fetchTeamMembers();
+        // Extract member IDs
+        const memberIds = members.map((member) => member.id);
+
+        // Skip feedback query if memberIds is empty
+        if (memberIds.length === 0) {
+            setTeamMembers(members);
+            return;
         }
+
+        // Fetch feedbacks only for the given team members
+        const feedbackQuery = query(
+            collection(db, "feedbacks"),
+            where("uid", "in", memberIds) // Filter feedbacks by member IDs
+        );
+        const feedbackSnapshot = await getDocs(feedbackQuery);
+        const feedbacks = feedbackSnapshot.docs.map((doc) => doc.data());
+
+        // Map latest feedback date to each team member
+        const updatedMembers = members.map((member) => {
+            const memberFeedbacks = feedbacks.filter((feedback) => feedback.uid === member.id);
+            const latestFeedback = memberFeedbacks.reduce((latest, current) => {
+                const currentDate = new Date(current.dateAdded);
+                return currentDate > new Date(latest.dateAdded) ? current : latest;
+            }, { dateAdded: null });
+
+            return {
+                ...member,
+                lastFeedbackDate: latestFeedback.dateAdded,
+            };
+        });
+
+        setTeamMembers(updatedMembers);
     }, [userUid]);
+
+    useEffect(() => {
+        fetchTeamMembersAndFeedback();
+    }, [fetchTeamMembersAndFeedback]);
 
     const handleEditMember = (member: TeamMember) => {
         setEditingMember(null); // Reset editingMember to trigger useEffect
@@ -59,13 +90,34 @@ export default function MyTeam() {
     };
 
     const handleAddFeedback = (member: TeamMember) => {
-        setSelectedMemberName(member.name);
+        setSelectedMember(member);
         setIsFeedbackPopupOpen(true);
     };
 
-    const handleFeedbackSubmit = (feedback: string) => {
-        console.log(`Feedback for ${selectedMemberName}:`, feedback);
-        // Add logic to save feedback
+    const handleFeedbackSubmit = async (member: TeamMember | null, feedback: string) => {
+        console.log(`Feedback for ${member?.name}:`, feedback);
+
+        if (!member) {
+            console.error("No team member selected for feedback");
+            return;
+        }
+
+        try {
+            // Save feedback to Firestore
+            await addDoc(collection(db, "feedbacks"), {
+                uid: member.id,
+                feedback: feedback,
+                dateAdded: new Date().toISOString(), // Save the current date
+            });
+
+            console.log("Feedback added successfully");
+
+            if (userUid) {
+                await fetchTeamMembersAndFeedback();
+            }
+        } catch (error) {
+            console.error("Error adding feedback:", error);
+        }
     };
 
     return (
@@ -91,7 +143,7 @@ export default function MyTeam() {
             />
             <FeedbackPopup
                 isOpen={isFeedbackPopupOpen}
-                teamMemberName={selectedMemberName}
+                teamMember={selectedMember}
                 onClose={() => setIsFeedbackPopupOpen(false)}
                 onAddFeedback={handleFeedbackSubmit}
             />

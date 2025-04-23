@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import "./FeedbackPopup.css";
+import {TeamMember} from "../types/TeamMember";
 
 interface FeedbackPopupProps {
     isOpen: boolean;
-    teamMemberName: string | null;
+    teamMember: TeamMember | null;
     onClose: () => void;
-    onAddFeedback: (feedback: string) => void;
+    onAddFeedback: (member: TeamMember | null, feedback: string) => void;
 }
 
 export default function FeedbackPopup({
                                           isOpen,
-                                          teamMemberName,
+                                          teamMember,
                                           onClose,
                                           onAddFeedback,
                                       }: FeedbackPopupProps) {
     const [feedback, setFeedback] = useState("");
 
-    const handleAdd = () => {
-        onAddFeedback(feedback);
+    const handleAdd = async () => {
+        onAddFeedback(teamMember, feedback);
+        setFeedback("");
         onClose();
     };
 
@@ -31,7 +33,7 @@ export default function FeedbackPopup({
     return (
         <div className="modal">
             <div className="modal-content">
-                <h3>Add Feedback for {teamMemberName}</h3>
+                <h3>Add Feedback for {teamMember?.name}</h3>
                 <textarea
                     className="editor-input"
                     placeholder="Enter feedback..."

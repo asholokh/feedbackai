@@ -16,6 +16,7 @@ export default function Header() {
         // Listen for authentication state changes
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setIsLoggedIn(!!user); // Set login state based on user presence
+
         });
 
         // Cleanup subscription on component unmount
