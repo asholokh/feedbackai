@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const prompt = `Analyze the following text: "${feedback}". Generate a formal and professional feedback summary based on the given notes. Ensure the summary is concise, actionable, and written in a positive tone.`;
+        const prompt = `${feedback}. If these text above looks like the feedback for someone - response with a formal and professional feedback summary based on the given notes. Ensure the summary is concise, actionable, and written in a positive tone. Otherwise return text "The provided text does not look like a feedback notes."`;
 
         const response = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
