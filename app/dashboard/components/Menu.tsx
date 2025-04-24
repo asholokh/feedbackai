@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaChartBar, FaCog, FaHistory, FaUsers } from "react-icons/fa";
+import {FaChartBar, FaCog, FaDesktop, FaHistory, FaUsers} from "react-icons/fa";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
@@ -33,9 +33,10 @@ export default function Menu({ onMenuClick }: MenuProps) {
     const [activeMenu, setActiveMenu] = useState("dashboard");
 
     const menuItems = [
+        { id: "", label: "Dashboard", icon: <FaDesktop className="menu-icon" /> },
         { id: "my-team", label: "My Team", icon: <FaUsers className="menu-icon" /> },
         { id: "feedback-history", label: "Feedback History", icon: <FaHistory className="menu-icon" /> },
-        { id: "reports", label: "Reports", icon: <FaChartBar className="menu-icon" /> },
+        { id: "feedback-summary", label: "Feedback summaries", icon: <FaChartBar className="menu-icon" /> },
         { id: "settings", label: "Settings", icon: <FaCog className="menu-icon" /> },
     ];
 

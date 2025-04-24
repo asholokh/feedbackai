@@ -21,9 +21,11 @@ export default function FeedbackHistory() {
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [selectedMemberId, setSelectedMemberId] = useState<string>("");
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    const feedbacksPerPage = 5;
 
     const fetchFeedbacksAndMembers = useCallback(async () => {
-        // Fetch team members
         const teamSnapshot = await getDocs(collection(db, "teamMembers"));
         const members = teamSnapshot.docs.map((doc) => ({
             id: doc.id,
@@ -32,7 +34,6 @@ export default function FeedbackHistory() {
 
         setTeamMembers(members);
 
-        // Fetch feedbacks
         const feedbackSnapshot = await getDocs(collection(db, "feedbacks"));
         const feedbacksData = feedbackSnapshot.docs.map((doc) => ({
             id: doc.id,
@@ -51,6 +52,18 @@ export default function FeedbackHistory() {
             .filter((feedback) => feedback.uid === selectedMemberId)
             .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
         : feedbacks.sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime());
+
+    const totalPages = Math.ceil(filteredFeedbacks.length / feedbacksPerPage);
+    const startIndex = (currentPage - 1) * feedbacksPerPage;
+    const currentFeedbacks = filteredFeedbacks.slice(startIndex, startIndex + feedbacksPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
 
     return (
         <div className="feedback-history-container">
@@ -71,7 +84,7 @@ export default function FeedbackHistory() {
                 </select>
             </div>
             <ul className="feedback-list">
-                {filteredFeedbacks.map((feedback) => {
+                {currentFeedbacks.map((feedback) => {
                     const member = teamMembers.find((member) => member.id === feedback.uid);
                     return (
                         <li key={feedback.id} className="feedback-item">
@@ -79,12 +92,23 @@ export default function FeedbackHistory() {
                                 <span>{member?.name || "Unknown"}</span>
                                 <span>{new Date(feedback.dateAdded).toLocaleString()}</span>
                             </div>
-                            <hr className="feedback-item-separator"/>
+                            <hr className="feedback-item-separator" />
                             <p className="feedback-item-text">{feedback.feedback}</p>
                         </li>
                     );
                 })}
             </ul>
+            <div className="pagination-controls">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span>
+                    Page {currentPage} of {totalPages}
+                </span>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 }

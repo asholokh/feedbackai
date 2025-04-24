@@ -2,7 +2,6 @@
     display: flex;
     height: 100vh;
 }
-
 .dashboard-container h1 {
     font-size: 2rem;
     color: #333;
@@ -20,4 +19,54 @@
     padding: 20px;
     background-color: #f5f5f5;
     overflow-y: auto;
+}
+
+.panels-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    grid-template-rows: 1fr 1fr; /* Two equal rows */
+    gap: 20px; /* Space between panels */
+    height: 100vh; /* Full height of the viewport */
+    padding: 20px;
+}
+
+.panel {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 18px;
+    font-weight: normal;
+    color: #333;
+    padding: 20px;
+    text-align: left;
+}
+
+.panel-1 {
+    background-color: #ffffff;
+}
+.panel-1 h3,
+.panel-2 h3 {
+    display: block; /* Ensures the element behaves like a block-level element */
+    border-bottom: 1px solid #ccc; /* Thin line */
+    padding-bottom: 5px; /* Space between the title and the line */
+    margin: 0; /* Reset margin */
+    width: 100%; /* Make the line span the full width of the panel */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    flex: 1; /* Allow the element to stretch in a flex container */
+    align-self: stretch; /* Ensure it stretches fully in the flex container */
+}
+
+.panel-2 {
+    background-color: #ffffff;
+}
+
+.panel-3 {
+    background-color: #ffffff;
+}
+
+.panel-4 {
+    background-color: #ffffff;
 }

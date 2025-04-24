@@ -40,7 +40,7 @@ export default function TeamTable({ teamMembers, onEditMember, onAddFeedback }: 
                             <FaCommentDots /> Add Feedback
                         </button>
                         <button className="table-button">
-                            <FaFileAlt /> Generate Report
+                            <FaFileAlt /> Generate Feedback Summary
                         </button>
                     </td>
                 </tr>
