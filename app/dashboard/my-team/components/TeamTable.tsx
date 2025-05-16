@@ -8,9 +8,10 @@ interface TeamTableProps {
     teamMembers: TeamMember[];
     onEditMember: (member: TeamMember) => void;
     onAddFeedback: (member: TeamMember) => void;
+    onDeleteMember: (memberId: string) => void;
 }
 
-export default function TeamTable({ teamMembers, onEditMember, onAddFeedback }: TeamTableProps) {
+export default function TeamTable({ teamMembers, onEditMember, onAddFeedback, onDeleteMember }: TeamTableProps) {
     return (
         <table className="team-table">
             <thead>
@@ -39,8 +40,10 @@ export default function TeamTable({ teamMembers, onEditMember, onAddFeedback }: 
                         >
                             <FaCommentDots /> Add Feedback
                         </button>
-                        <button className="table-button">
-                            <FaFileAlt /> Generate Feedback Summary
+                        <button className="table-button"
+                                onClick={() => onDeleteMember(member.id)}
+                        >
+                            <FaFileAlt /> Delete
                         </button>
                     </td>
                 </tr>

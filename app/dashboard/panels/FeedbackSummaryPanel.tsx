@@ -5,7 +5,7 @@ import {db} from "../../../firebase/firebaseConfig";
 import {collection, getDocs} from "firebase/firestore";
 import {useRouter} from "next/navigation";
 import {FaCheckCircle} from "react-icons/fa";
-
+import './FeedbackSummaryPanel.css'
 
 interface Feedback {
     id: string;
@@ -21,8 +21,8 @@ interface TeamMember {
 }
 
 export default function FeedbackSummaryPanel() {
-    //const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [outdatedFeedbackMembers, setOutdatedFeedbackMembers] = useState<TeamMember[]>([]);
+    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const router = useRouter();
 
     useEffect(() => {
@@ -32,6 +32,10 @@ export default function FeedbackSummaryPanel() {
                 id: doc.id,
                 ...doc.data(),
             })) as TeamMember[];
+
+            setTeamMembers(members);
+
+            if (members.length === 0) return; // No need to fetch feedbacks if no members exist
 
             const feedbackSnapshot = await getDocs(collection(db, "feedbacks"));
             const feedbacks = feedbackSnapshot.docs.map((doc) => ({
@@ -52,7 +56,6 @@ export default function FeedbackSummaryPanel() {
                 return lastFeedbackDate < twoWeeksAgo;
             });
 
-            //setTeamMembers(members);
             setOutdatedFeedbackMembers(outdatedMembers);
         };
 
@@ -62,7 +65,14 @@ export default function FeedbackSummaryPanel() {
     return (
         <div>
             <h3>Feedback Summary</h3>
-            {outdatedFeedbackMembers.length > 0 ? (
+            {teamMembers.length === 0 ? (
+                <>
+                    <p>No team members have been added yet.</p>
+                    <button className="goto-my-team-button" onClick={() => router.push("/dashboard/my-team")}>
+                        Add Team Members
+                    </button>
+                </>
+            ) : outdatedFeedbackMembers.length > 0 ? (
                 <>
                     <p>
                         Please consider providing feedback for the following team members who have not received recent

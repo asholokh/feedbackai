@@ -36,7 +36,7 @@ export default function Menu({ onMenuClick }: MenuProps) {
         { id: "", label: "Dashboard", icon: <FaDesktop className="menu-icon" /> },
         { id: "my-team", label: "My Team", icon: <FaUsers className="menu-icon" /> },
         { id: "feedback-history", label: "Feedback History", icon: <FaHistory className="menu-icon" /> },
-        { id: "feedback-summary", label: "Feedback summaries", icon: <FaChartBar className="menu-icon" /> },
+        { id: "feedback-summaries", label: "Feedback summaries", icon: <FaChartBar className="menu-icon" /> },
         { id: "settings", label: "Settings", icon: <FaCog className="menu-icon" /> },
     ];
 

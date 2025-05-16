@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useCallback, useEffect, useState} from "react";
-import {addDoc, collection, getDocs, query, where} from "@firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, getDocs, query, where} from "@firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { auth } from "../../../firebase/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -94,6 +94,24 @@ export default function MyTeam() {
         setIsFeedbackPopupOpen(true);
     };
 
+    const handleDeleteMember = async (memberId: string) => {
+        if (!window.confirm("Are you sure you want to delete this team member?")) {
+            return;
+        }
+
+        try {
+            // Delete the team member from Firestore
+            await deleteDoc(doc(db, "teamMembers", memberId));
+
+            // Update the local state
+            setTeamMembers((prevMembers) => prevMembers.filter((member) => member.id !== memberId));
+
+            console.log("Team member deleted successfully");
+        } catch (error) {
+            console.error("Error deleting team member:", error);
+        }
+    };
+
     const handleFeedbackSubmit = async (member: TeamMember | null, feedback: string) => {
         console.log(`Feedback for ${member?.name}:`, feedback);
 
@@ -132,6 +150,7 @@ export default function MyTeam() {
                 teamMembers={teamMembers}
                 onEditMember={handleEditMember}
                 onAddFeedback={handleAddFeedback}
+                onDeleteMember={handleDeleteMember}
             />
             <TeamMemberPopup
                 isOpen={isPopupOpen}
