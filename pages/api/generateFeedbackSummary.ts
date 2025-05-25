@@ -44,9 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(400).json({ error: "Feedbacks not provided" });
             }
 
-            console.log("Feedbacks received:", feedbacks);
-            console.log("Feedbacks amount:", feedbacks.length);
-
             let feedbacksString = "";
 
             feedbacks.forEach((feedback, index) => {
@@ -63,22 +60,28 @@ Use a clear, supportive, and professional tone appropriate for a performance rev
 Feedback notes:
             ` + feedbacksString;
 
-            console.log(prompt);
+            const isLocalhost = req.headers.host?.includes('localhost') || req.headers.host?.includes('127.0.0.1');
+            let feedbackSummaryResult;
+            if (isLocalhost) {
+                console.warn("Running on localhost, using mock response.");
+                feedbackSummaryResult = "Mock feedback summary for development.";
+            } else {
+                const response = await openai.chat.completions.create({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are helping a manager write professional feedback for a team member"
+                        },
+                        {role: "user", content: prompt},
+                    ],
+                    max_tokens: 150,
+                    temperature: 0.7,
+                });
 
-            const response = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
-                messages: [
-                    { role: "system", content: "You are helping a manager write professional feedback for a team member" },
-                    { role: "user", content: prompt },
-                ],
-                max_tokens: 150,
-                temperature: 0.7,
-            });
-
-            console.log(response.choices[0]?.message);
-
-            const result = response.choices[0]?.message?.content?.trim();
-            res.status(200).json({ result: JSON.stringify({feedbackSummary: result}) || "No response generated." });
+                feedbackSummaryResult = response.choices[0]?.message?.content?.trim();
+            }
+            res.status(200).json({ result: {feedbackSummary: feedbackSummaryResult || "No response generated."} });
         } catch (error) {
             console.error("Error generating feedback summary:", error);
             res.status(500).json({ error: "Failed to generate feedback summary." });

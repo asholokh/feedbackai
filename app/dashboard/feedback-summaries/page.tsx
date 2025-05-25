@@ -109,7 +109,7 @@ export default function FeedbackSummary() {
                 const data = await response.json();
 
                 // Update the summaryText with the generated summary
-                setSummaryText(data.feedbackSummary || "No summary generated.");
+                setSummaryText(data.result.feedbackSummary || "No summary generated.");
             } else {
                 console.error("User is not authenticated.");
             }
