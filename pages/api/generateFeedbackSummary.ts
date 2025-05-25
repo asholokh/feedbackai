@@ -1,52 +1,75 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import admin from "firebase-admin";
+
+import { OpenAI } from "openai";
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY, // Use a secure environment variable
+});
+
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+        }),
+    });
+}
+
+interface Feedback {
+    feedback: string;
+    // Add other properties your feedback object might have
+    // For example: date?: Date; teamMemberId?: string;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
-        const { startDate, endDate, teamMember } = req.body;
+        const authHeader = req.headers.authorization;
 
-        if (!startDate || !endDate || !teamMember) {
-            return res.status(400).json({ error: "Missing required fields." });
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+        try {
+            const token = authHeader.split(" ")[1]
+            await admin.auth().verifyIdToken(token);
+        } catch {
+            return res.status(401).json({ error: "Unauthorized" });
         }
 
         try {
-            // Fetch feedbacks for the given team member and date range
-            const feedbackQuery = query(
-                collection(db, "feedbacks"),
-                where("teamMemberId", "==", teamMember),
-                where("date", ">=", startDate),
-                where("date", "<=", endDate)
-            );
-            const snapshot = await getDocs(feedbackQuery);
-
-            const feedbacks = snapshot.docs.map((doc) => doc.data().text).join("\n");
+            const { feedbacks } = req.body as { feedbacks: Feedback[] };
 
             if (!feedbacks) {
-                return res.status(404).json({ error: "No feedbacks found for the given criteria." });
+                res.status(400).json({ error: "Feedbacks not provided" });
             }
 
-            // Generate summary using ChatGPT
-            const response = await fetch("https://api.openai.com/v1/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "text-davinci-003",
-                    prompt: `Generate a feedback summary for the following feedbacks:\n${feedbacks}`,
-                    max_tokens: 500,
-                }),
+            const prompt = `
+            You are helping a manager write professional feedback for a team member. Based on the notes provided below, write a short feedback summary that is:
+– Valuable (insightful and actionable)
+– Constructive (includes areas for improvement)
+– Positive (acknowledges strengths and contributions)
+
+Use a clear, supportive, and professional tone appropriate for a performance review or one-on-one conversation.
+Feedback notes:
+${feedbacks.map((feedback, index) => `
+--- Feedback ${index + 1} ---
+${feedback.feedback}
+`).join('')}
+            `;
+
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    { role: "system", content: "You are helping a manager write professional feedback for a team member" },
+                    { role: "user", content: prompt },
+                ],
+                max_tokens: 150,
+                temperature: 0.7,
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                res.status(200).json({ summary: data.choices[0].text });
-            } else {
-                res.status(500).json({ error: data.error.message });
-            }
+            const result = response.choices[0]?.message?.content?.trim();
+            res.status(200).json({ result: result || "No response generated." });
         } catch (error) {
             console.error("Error generating feedback summary:", error);
             res.status(500).json({ error: "Failed to generate feedback summary." });

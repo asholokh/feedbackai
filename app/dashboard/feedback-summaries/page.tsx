@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "@firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import "./page.css";
+import {getAuth} from "firebase/auth";
 
 interface TeamMember {
     id: string;
@@ -51,7 +52,7 @@ export default function FeedbackSummary() {
         fetchTeamMembersAndFeedbacks();
     }, []);
 
-    const handleGenerateSummary = () => {
+    const handleGenerateSummary = async () => {
         // Validate dates and selected member before proceeding
         if (!fromDate || !toDate) {
             alert("Please select both from and to dates");
@@ -83,15 +84,39 @@ export default function FeedbackSummary() {
         });
 
         setFilteredFeedbacks(filtered);
+        const feedBacksArray = filtered.map((feedback) => { return "When: " + feedback.dateAdded + "." + feedback.feedback});
 
-        // Generate a simple summary text based on filtered feedbacks
-        const memberName = selectedMemberId
-            ? teamMembers.find(m => m.id === selectedMemberId)?.name || "Unknown"
-            : "All members";
+        try {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            // Make a call to the backend API
+            if (user) {
+                const token = await user.getIdToken();
+                const response = await fetch("/api/generateFeedbackSummary", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        feedbacks: feedBacksArray
+                    }),
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to generate feedback summary");
+                }
 
-        setSummaryText(`Feedback Summary for ${memberName} from ${fromDate} to ${toDate}:\n\n` +
-            `Total feedbacks: ${filtered.length}\n\n` +
-            `You can add your analysis here...`);
+                const data = await response.json();
+
+                // Update the summaryText with the generated summary
+                setSummaryText(data.summary || "No summary generated.");
+            } else {
+                console.error("User is not authenticated.");
+            }
+        } catch (error) {
+            console.error("Error generating feedback summary:", error);
+            alert("An error occurred while generating the feedback summary.");
+        }
     };
 
     return (
