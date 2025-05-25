@@ -58,6 +58,8 @@ ${feedback.feedback}
 `).join('')}
             `;
 
+            console.log(prompt);
+
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo",
                 messages: [
@@ -67,6 +69,8 @@ ${feedback.feedback}
                 max_tokens: 150,
                 temperature: 0.7,
             });
+
+            console.log(response);
 
             const result = response.choices[0]?.message?.content?.trim();
             res.status(200).json({ result: result || "No response generated." });
