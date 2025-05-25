@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 import "./SimplifiedFeedbackPanel.css";
+import {getAuth} from "firebase/auth";
 
 export default function SimplifiedFeedbackPanel() {
     const [showPopup, setShowPopup] = useState(false);
@@ -14,18 +15,28 @@ export default function SimplifiedFeedbackPanel() {
         }
 
         try {
-            const response = await fetch("/api/generateFeedbackSummary", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({feedbacks: [ feedback ] }),
-            });
+            const auth = getAuth();
+            const user = auth.currentUser;
+            // Make a call to the backend API
+            if (user) {
+                const token = await user.getIdToken();
+                const response = await fetch("/api/generateFeedbackSummary", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({feedbacks: [feedback]}),
+                });
+                const data = await response.json();
 
-            const data = await response.json();
-
-            if (response.ok) {
-                setGeneratedText(data.result.feedbackSummary);
+                if (response.ok) {
+                    setGeneratedText(data.result.feedbackSummary);
+                } else {
+                    setGeneratedText(data.error || "An error occurred while generating feedback.");
+                }
             } else {
-                setGeneratedText(data.error || "An error occurred while generating feedback.");
+                console.error("User is not authenticated.");
             }
         } catch (error) {
             console.error("Error:", error);
