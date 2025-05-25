@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let feedbacksString = "";
 
             feedbacks.forEach((feedback, index) => {
-                feedbacksString += `Feedback ${index + 1}: ${feedback.feedback}\n`;
+                feedbacksString += `Feedback ${index + 1}: ${feedback}\n`;
             });
 
             const prompt = `

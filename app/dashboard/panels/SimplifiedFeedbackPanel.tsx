@@ -17,7 +17,7 @@ export default function SimplifiedFeedbackPanel() {
             const response = await fetch("/api/generateFeedbackSummary", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({feedbacks: [{ feedback }] }),
+                body: JSON.stringify({feedbacks: [ feedback ] }),
             });
 
             const data = await response.json();
