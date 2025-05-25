@@ -44,6 +44,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(400).json({ error: "Feedbacks not provided" });
             }
 
+            console.log("Feedbacks received:", feedbacks);
+            console.log("Feedbacks amount:", feedbacks.length);
+
+            let feedbacksString = "";
+
+            feedbacks.forEach((feedback, index) => {
+                feedbacksString += `Feedback ${index + 1}: ${feedback.feedback}\n`;
+            });
+
             const prompt = `
             You are helping a manager write professional feedback for a team member. Based on the notes provided below, write a short feedback summary that is:
 – Valuable (insightful and actionable)
@@ -52,11 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 Use a clear, supportive, and professional tone appropriate for a performance review or one-on-one conversation.
 Feedback notes:
-${feedbacks.map((feedback, index) => `
---- Feedback ${index + 1} ---
-${feedback.feedback}
-`).join('')}
-            `;
+            ` + feedbacksString;
 
             console.log(prompt);
 
@@ -70,7 +75,7 @@ ${feedback.feedback}
                 temperature: 0.7,
             });
 
-            console.log(response);
+            console.log(response.choices[0]?.message);
 
             const result = response.choices[0]?.message?.content?.trim();
             res.status(200).json({ result: result || "No response generated." });
