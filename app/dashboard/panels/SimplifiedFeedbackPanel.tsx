@@ -23,7 +23,7 @@ export default function SimplifiedFeedbackPanel() {
             const data = await response.json();
 
             if (response.ok) {
-                setGeneratedText(data.result);
+                setGeneratedText(data.feedbackSummary);
             } else {
                 setGeneratedText(data.error || "An error occurred while generating feedback.");
             }

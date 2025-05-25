@@ -78,7 +78,7 @@ Feedback notes:
             console.log(response.choices[0]?.message);
 
             const result = response.choices[0]?.message?.content?.trim();
-            res.status(200).json({ result: result || "No response generated." });
+            res.status(200).json({ result: JSON.stringify({feedbackSummary: result}) || "No response generated." });
         } catch (error) {
             console.error("Error generating feedback summary:", error);
             res.status(500).json({ error: "Failed to generate feedback summary." });
